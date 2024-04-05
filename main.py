@@ -7,6 +7,7 @@ WIDTH_IMG_BULLET, HEIGHT_IMG_BULLET = 50, 50
 SPACESHIPX, SPACESHIPY = 350, 500
 CHANGEX, CHANGEY = 0, 0
 BULLETX, BULLETY = 365, 520
+
 score=0
 
 pygame.init()
@@ -43,7 +44,7 @@ new_enemyimg_color = picture_color(enemyimg_color)
 enemyimg_scaled = pygame.transform.scale(new_enemyimg_color, (WIDTH_IMG_ENEMY, HEIGHT_IMG_ENEMY))
 alienX=random.randint(0, 740)
 alienY=random.randint(30, 30)
-alienSpeedX=0.5
+alienSpeedX=0.2
 alienSpeedY=30
 
 bulletimg = pygame.image.load('./img/bala.png')
@@ -60,8 +61,8 @@ def game_over():
     font_restart = pygame.font.SysFont('Arial', 32, 'bold')
     img = font_gameover.render('GAME OVER', True, 'white')
     img_restart = font_restart.render('Presiona R para volver a empezar', True, 'white')
-    screen.blit(img, (220,180))
-    screen.blit(img_restart, (200,250))
+    screen.blit(img, (200,180))
+    # screen.blit(img_restart, (200,250))
 
 enemyimg_scaled = []
 alienX = []
@@ -77,7 +78,7 @@ for i in range(no_of_aliens):
     enemyimg_scaled.append(pygame.transform.scale(new_enemyimg_color, (WIDTH_IMG_ENEMY, HEIGHT_IMG_ENEMY)))
     alienX.append(random.randint(0, 740))
     alienY.append(random.randint(30, 30))
-    alienSpeedX.append(0.5)
+    alienSpeedX.append(0.2)
     alienSpeedY.append(30)
 
 running = True
@@ -96,6 +97,7 @@ while running:
                 if check is False:
                     check=True
                     BULLETX=SPACESHIPX+15
+                    
             if event.key == pygame.K_r:  # Reiniciar juego al presionar 'R'
                 if not running:
                     running = True
@@ -115,16 +117,23 @@ while running:
                 alienY[j]=2000
             game_over()
             break
-         
-        alienX[i]+=alienSpeedX[i]
-        if alienX[i]<=7:
-            alienSpeedX[i]=0.5
-            alienY[i]+=alienSpeedY[i]
-        elif alienX[i]>=740:
-            alienSpeedX[i]=-0.5
-            alienY[i]+=alienSpeedY[i]
 
-        
+        alienX[i]+=alienSpeedX[i]
+        if score < 15:
+            if alienX[i]<=7:
+                alienSpeedX[i]=0.2
+                alienY[i]+=alienSpeedY[i]
+            elif alienX[i]>=740:
+                alienSpeedX[i]=-0.2
+                alienY[i]+=alienSpeedY[i]
+        elif score >= 15:
+            if alienX[i]<=7:
+                alienSpeedX[i]=0.5
+                alienY[i]+=alienSpeedY[i]
+            elif alienX[i]>=740:
+                alienSpeedX[i]=-0.5
+                alienY[i]+=alienSpeedY[i]
+
         distance = math.sqrt(math.pow(BULLETX-alienX[i], 2)+math.pow(BULLETY-alienY[i],2))
         if distance<30:
             BULLETY=520
@@ -132,6 +141,7 @@ while running:
             alienX[i]=random.randint(0, 740)
             alienY[i]=random.randint(30, 30)
             score+=1
+                
         screen.blit(enemyimg_scaled[i], (alienX[i], alienY[i]))
 
     if BULLETY<=0:
