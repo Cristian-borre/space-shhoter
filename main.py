@@ -126,12 +126,19 @@ while running:
             elif alienX[i]>=740:
                 alienSpeedX[i]=-0.2
                 alienY[i]+=alienSpeedY[i]
-        elif score >= 15:
+        elif score >= 30:
             if alienX[i]<=7:
                 alienSpeedX[i]=0.5
                 alienY[i]+=alienSpeedY[i]
             elif alienX[i]>=740:
                 alienSpeedX[i]=-0.5
+                alienY[i]+=alienSpeedY[i]
+        elif score >= 30:
+            if alienX[i]<=7:
+                alienSpeedX[i]=0.8
+                alienY[i]+=alienSpeedY[i]
+            elif alienX[i]>=740:
+                alienSpeedX[i]=-0.8
                 alienY[i]+=alienSpeedY[i]
 
         distance = math.sqrt(math.pow(BULLETX-alienX[i], 2)+math.pow(BULLETY-alienY[i],2))
